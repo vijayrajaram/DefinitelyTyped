@@ -207,6 +207,13 @@ declare namespace AdazzleReactDataGrid {
         onRowClick?: (rowIdx : number, row : object) => void
 
         /**
+         * An event function called when a row is clicked.
+         * @param rowIdx zero index number of row clicked
+         * @param row object behind the row
+         */
+        onRowDoubleClick?: (rowIdx : number, row : object) => void
+
+        /**
          * An event function called when a row is expanded with the toggle
          * @param props OnRowExpandToggle object
          */
@@ -221,6 +228,19 @@ declare namespace AdazzleReactDataGrid {
         getValidFilterValues?: (columnKey: string) => Array<any>
 
         getCellActions?: (column: Column, row: object) => (ActionButton | ActionMenu)[]
+
+        /**
+         * Responsible for returning
+         * @param {object} row
+         * @returns {SubRowDetails}
+         */
+        getSubRowDetails?: (row: object) => SubRowDetails
+
+        /**
+         * An event function called when a Cell is expanded in a tree structure on the grid
+         * @param {AdazzleReactDataGrid.CellExpandEvent} e
+         */
+        onCellExpand? :(e: CellExpandEvent) => void
     }
 
     type ActionButton = {
@@ -479,6 +499,39 @@ declare namespace AdazzleReactDataGrid {
          * The term to filter by.
          */
         filterTerm: string
+    }
+
+    /**
+     * Details required to build tree structure on the grid
+     */
+    interface SubRowDetails {
+        children: object[],
+        expanded: boolean,
+        field: string,
+        group: boolean,
+        treeDepth: number
+    }
+
+    /**
+     * Information about the Cell expansion set in CellExpandEvent of onCellExpand function
+     */
+    interface CellExpandArgs {
+        canExpand: boolean,
+        children: object[],
+        expanded: boolean,
+        field: string,
+        subRowDetails: SubRowDetails,
+        treeDepth: number
+    }
+
+    /**
+     * Information about Cell expand/collapse event
+     */
+    interface CellExpandEvent {
+        expandArgs: CellExpandArgs,
+        idx: number,
+        rowData: any,
+        rowIdx: number
     }
 
     /**
